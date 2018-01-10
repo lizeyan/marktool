@@ -243,27 +243,28 @@ void DataScroll::EnsureSelectVisible()
 // Listen to keyboard events to perform additional actions
 void DataScroll::keyPressEvent(QKeyEvent* e)
 {
-  if (!ds_)
-    return;
-  const double moveFactor = 0.1;
-
-  // Move the selection towards left
-  if (e->key() == Qt::Key_Left) {
-    selectStart_ = std::max(qint64(selectStart_ - outlineSize_ * moveFactor),
-                            ds_->min_time());
-  // Move the selection towards right
-  } else if (e->key() == Qt::Key_Right) {
-    selectStart_ = std::min(qint64(selectStart_ + outlineSize_ * moveFactor),
-                            ds_->max_time() - selectSize_);
-  } else {
-    return;
-  }
-
-  EnsureSelectVisible();
-  update();
-  emit startIndexChanged();
-  emit selectionChanged();
   e->accept();
+  return;
+//  if (!ds_)
+//    return;
+//  // Move the selection towards left
+//  constexpr qreal moveFactor = 0.9;
+//  if (e->key() == Qt::Key_Left) {
+//    selectStart_ = std::max(qint64(selectStart_ - selectSize_ * moveFactor),
+//                            ds_->min_time());
+//  // Move the selection towards right
+//  } else if (e->key() == Qt::Key_Right) {
+//    selectStart_ = std::min(qint64(selectStart_ + selectSize_ * moveFactor),
+//                            ds_->max_time() - selectSize_);
+//  } else {
+//    return;
+//  }
+
+//  EnsureSelectVisible();
+//  update();
+//  emit startIndexChanged();
+//  emit selectionChanged();
+//  e->accept();
 }
 
 // Listen to wheel event to change the size of selection range

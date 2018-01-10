@@ -144,14 +144,12 @@ void MainWindow::on_chkLabel2_clicked()
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
-    qDebug() << event->type();
-    if (event->type() == QEvent::KeyPress)
+    if (event->type() == QEvent::KeyPress && (watched == ui->dataEdit || watched == ui->dataScroll))
     {
         // forward all keypress event to dataedit and datascroll
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
         ui->dataEdit->keyPressEvent(keyEvent);
-        ui->dataScroll->keyPressEvent(keyEvent);
-        qDebug() << "filterd";
+        return false;
     }
     return QObject::eventFilter(watched, event);
 }
