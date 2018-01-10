@@ -138,7 +138,7 @@ void DataPlot::render(QPainter *painter, const QRect &target, qreal start,
       int label1 = ds_->label(i-1), label1_2 = ds_->label2(i-1),
           label2 = ds_->label(i), label2_2 = ds_->label2(i);
 
-      if (!diff_mode_) {
+      if (!is_missing_segment) {
         // If we are not in diff mode.
         if (label1 == label2) {
           painter->setPen(pen[label1]);
@@ -149,24 +149,17 @@ void DataPlot::render(QPainter *painter, const QRect &target, qreal start,
           painter->setPen(pen[label2]);
           painter->drawLine(pm, p2);
         }
-        if (is_missing_segment)
-        {
-            painter->save();
-            painter->setPen(missing_seg_pen);
-            painter->drawLine(p1, p2);
-            painter->restore();
-        }
       } else {
         // If we are in diff mode
-        if (label1 == label2) {
-          painter->setPen(pen[Label2Idx[label1][label1_2]]);
-          painter->drawLine(p1, p2);
-        } else {
-          painter->setPen(pen[Label2Idx[label1][label1_2]]);
-          painter->drawLine(p1, pm);
-          painter->setPen(pen[Label2Idx[label2][label2_2]]);
-          painter->drawLine(pm, p2);
-        }
+//        if (label1 == label2) {
+//          painter->setPen(pen[Label2Idx[label1][label1_2]]);
+//          painter->drawLine(p1, p2);
+//        } else {
+//          painter->setPen(pen[Label2Idx[label1][label1_2]]);
+//          painter->drawLine(p1, pm);
+//          painter->setPen(pen[Label2Idx[label2][label2_2]]);
+//          painter->drawLine(pm, p2);
+//        }
       }
     }
 
