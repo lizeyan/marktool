@@ -36,6 +36,8 @@ private slots:
 
   void on_chkLabel2_clicked();
 
+  void on_selSupportFeature_currentIndexChanged(int index);
+
 private:
   Ui::MainWindow *ui;
 

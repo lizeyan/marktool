@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
   lockUpdateFeature_(false)
 {
   ui->setupUi(this);
-  ui->chkLabel2->setVisible(true);
+  ui->chkLabel2->setVisible(false);
 
   ui->dataEdit->installEventFilter(this);
   ui->dataScroll->installEventFilter(this);
@@ -33,7 +33,7 @@ static const char* MonthNames[] = {
 void MainWindow::on_dataScroll_startIndexChanged()
 {
   QDateTime dt;
-  dt = QDateTime::fromTime_t(ui->dataScroll->startIndex());
+  dt = QDateTime::fromTime_t(static_cast<uint>(ui->dataScroll->startIndex()));
   ui->lblMonth->setText(tr("%1").arg(MonthNames[dt.date().month()]));
 }
 
@@ -99,7 +99,7 @@ void MainWindow::on_btnSave_clicked()
 
 void MainWindow::on_dataEdit_dataRangeChanged(qreal start, qreal size)
 {
-  ui->dataScroll->setSelectRange(start, size);
+  ui->dataScroll->setSelectRange(static_cast<int>(start), static_cast<int>(size));
 }
 
 void MainWindow::updateFeatureBox()
@@ -113,6 +113,13 @@ void MainWindow::updateFeatureBox()
   features_.setStringList(featureArray);
   ui->selFeature->setModel(&features_);
   ui->selFeature->setCurrentIndex(dataSet_.getColumnIndex("value"));
+
+  ui->selSupportFeature->clear();
+  ui->selSupportFeature->addItems(featureArray);
+  ui->selSupportFeature->addItem("None");
+  ui->selSupportFeature->setCurrentIndex(dataSet_.columns().size());
+  ui->selSupportFeature->show();
+  qDebug() << ui->selSupportFeature->pos();
   lockUpdateFeature_ = false;
 
   // set the status of chkLabel2
@@ -129,6 +136,16 @@ void MainWindow::on_selFeature_currentIndexChanged(int index)
     ui->dataEdit->update();
     ui->dataScroll->dataSetChanged();
   }
+}
+
+void MainWindow::on_selSupportFeature_currentIndexChanged(int index)
+{
+    if (!lockUpdateFeature_ && index >= 0) {
+        dataSet_.selectSV(index);
+        qDebug() << dataSet_.legalSV();
+        ui->dataEdit->update();
+        ui->dataScroll->dataSetChanged();
+    }
 }
 
 void MainWindow::on_valueSlider_valueChanged(int value)

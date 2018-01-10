@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.7.0
+** Created by: Qt User Interface Compiler version 5.10.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -21,7 +21,6 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSlider>
-#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "dataedit.h"
@@ -43,8 +42,9 @@ public:
     QHBoxLayout *horizontalLayout_2;
     QLabel *label;
     QComboBox *selFeature;
+    QLabel *support_label;
+    QComboBox *selSupportFeature;
     QCheckBox *chkLabel2;
-    QSpacerItem *horizontalSpacer;
     QPushButton *btnOpen;
     QPushButton *btnSave;
 
@@ -116,6 +116,11 @@ public:
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
         label = new QLabel(centralWidget);
         label->setObjectName(QStringLiteral("label"));
+        QSizePolicy sizePolicy2(QSizePolicy::Maximum, QSizePolicy::Preferred);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
+        label->setSizePolicy(sizePolicy2);
         QFont font1;
         font1.setPointSize(14);
         label->setFont(font1);
@@ -124,31 +129,54 @@ public:
 
         selFeature = new QComboBox(centralWidget);
         selFeature->setObjectName(QStringLiteral("selFeature"));
-        selFeature->setMinimumSize(QSize(400, 0));
+        QSizePolicy sizePolicy3(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(selFeature->sizePolicy().hasHeightForWidth());
+        selFeature->setSizePolicy(sizePolicy3);
         selFeature->setFont(font1);
 
         horizontalLayout_2->addWidget(selFeature);
 
+        support_label = new QLabel(centralWidget);
+        support_label->setObjectName(QStringLiteral("support_label"));
+        sizePolicy2.setHeightForWidth(support_label->sizePolicy().hasHeightForWidth());
+        support_label->setSizePolicy(sizePolicy2);
+
+        horizontalLayout_2->addWidget(support_label);
+
+        selSupportFeature = new QComboBox(centralWidget);
+        selSupportFeature->setObjectName(QStringLiteral("selSupportFeature"));
+        sizePolicy3.setHeightForWidth(selSupportFeature->sizePolicy().hasHeightForWidth());
+        selSupportFeature->setSizePolicy(sizePolicy3);
+
+        horizontalLayout_2->addWidget(selSupportFeature);
+
         chkLabel2 = new QCheckBox(centralWidget);
         chkLabel2->setObjectName(QStringLiteral("chkLabel2"));
         chkLabel2->setEnabled(false);
+        QSizePolicy sizePolicy4(QSizePolicy::Maximum, QSizePolicy::Fixed);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(chkLabel2->sizePolicy().hasHeightForWidth());
+        chkLabel2->setSizePolicy(sizePolicy4);
         chkLabel2->setFont(font1);
         chkLabel2->setCheckable(true);
 
         horizontalLayout_2->addWidget(chkLabel2);
 
-        horizontalSpacer = new QSpacerItem(40, 14, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_2->addItem(horizontalSpacer);
-
         btnOpen = new QPushButton(centralWidget);
         btnOpen->setObjectName(QStringLiteral("btnOpen"));
+        sizePolicy4.setHeightForWidth(btnOpen->sizePolicy().hasHeightForWidth());
+        btnOpen->setSizePolicy(sizePolicy4);
         btnOpen->setFont(font1);
 
         horizontalLayout_2->addWidget(btnOpen);
 
         btnSave = new QPushButton(centralWidget);
         btnSave->setObjectName(QStringLiteral("btnSave"));
+        sizePolicy4.setHeightForWidth(btnSave->sizePolicy().hasHeightForWidth());
+        btnSave->setSizePolicy(sizePolicy4);
         btnSave->setFont(font1);
 
         horizontalLayout_2->addWidget(btnSave);
@@ -157,6 +185,10 @@ public:
         verticalLayout->addLayout(horizontalLayout_2);
 
         MainWindow->setCentralWidget(centralWidget);
+#ifndef QT_NO_SHORTCUT
+        label->setBuddy(selFeature);
+        support_label->setBuddy(selSupportFeature);
+#endif // QT_NO_SHORTCUT
 
         retranslateUi(MainWindow);
 
@@ -165,12 +197,13 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Please Open Your Data File ...", 0));
-        lblMonth->setText(QApplication::translate("MainWindow", "Month", 0));
-        label->setText(QApplication::translate("MainWindow", "Display Column", 0));
-        chkLabel2->setText(QApplication::translate("MainWindow", "Diff Mode", 0));
-        btnOpen->setText(QApplication::translate("MainWindow", "Open", 0));
-        btnSave->setText(QApplication::translate("MainWindow", "Save", 0));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Please Open Your Data File ...", nullptr));
+        lblMonth->setText(QApplication::translate("MainWindow", "Month", nullptr));
+        label->setText(QApplication::translate("MainWindow", "Display", nullptr));
+        support_label->setText(QApplication::translate("MainWindow", "Support", nullptr));
+        chkLabel2->setText(QApplication::translate("MainWindow", "Diff Mode", nullptr));
+        btnOpen->setText(QApplication::translate("MainWindow", "Open", nullptr));
+        btnSave->setText(QApplication::translate("MainWindow", "Save", nullptr));
     } // retranslateUi
 
 };

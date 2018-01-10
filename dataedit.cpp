@@ -140,30 +140,32 @@ void DataEdit::paintEvent(QPaintEvent* e)
   dataPlot.setDataSet(ds_);
 
   if (!diff_mode_) {
-    // The last day data
-    qreal dayShift = - 24 * 60 * 60;
-    for (int i=0; i<2; ++i)
-      dataPlot.setPen(i, lastDayPen[i]);
-    dataPlot.render(&painter,
-                    clip,
-                    clip.left() / picScale_ + range_.start() + dayShift,
-                    picScale_,
-                    yPercent_);
+//    // The last day data
+//    qreal dayShift = - 24 * 60 * 60;
+//    for (int i=0; i<2; ++i)
+//      dataPlot.setPen(i, lastDayPen[i]);
+//    dataPlot.render(&painter,
+//                    clip,
+//                    clip.left() / picScale_ + range_.start() + dayShift,
+//                    picScale_,
+//                    yPercent_);
 
-    // The last week data
-    qreal weekShift = - 24 * 60 * 7 * 60;
-    for (int i=0; i<2; ++i)
-      dataPlot.setPen(i, lastWeekPen[i]);
-    dataPlot.render(&painter,
-                    clip,
-                    clip.left() / picScale_ + range_.start() + weekShift,
-                    picScale_,
-                    yPercent_);
+//    // The last week data
+//    qreal weekShift = - 24 * 60 * 7 * 60;
+//    for (int i=0; i<2; ++i)
+//      dataPlot.setPen(i, lastWeekPen[i]);
+//    dataPlot.render(&painter,
+//                    clip,
+//                    clip.left() / picScale_ + range_.start() + weekShift,
+//                    picScale_,
+//                    yPercent_);
 
     // Current day data
     for (int i=0; i<2; ++i)
       dataPlot.setPen(i, dayPen[i]);
     dataPlot.render(&painter, clip, clip.left() / picScale_ + range_.start(),
+                    picScale_, yPercent_);
+    dataPlot.renderSupportLine(&painter, clip, clip.left() / picScale_ + range_.start(),
                     picScale_, yPercent_);
   } else {
     // Current day data

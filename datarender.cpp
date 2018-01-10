@@ -186,3 +186,93 @@ void DataPlot::render(QPainter *painter, const QRect &target, qreal start,
     }
   }
 }
+
+
+void DataPlot::renderSupportLine(QPainter *painter, QRect const& target, qreal start, qreal scale,
+              qreal yPercent)
+{
+  if (!dataSet()->legalSV()) // illegal idx
+      return;
+
+  if (!ds_)
+    return;
+  const int width = target.width();
+  const int height = target.height();
+  const int left = target.left();
+  const int top = target.top();
+
+  // Determine the start offset, the unit size, and the essetial points
+  //
+  // Note that `start` is the start timestamp, so we should calculate the
+  // start index.
+  qint64 desiredStartTime = qint64(start - 1 - 1/scale);
+  int startId = ds_->lower_bound(desiredStartTime) - 1;
+  qint64 desiredEndTime = int(qCeil(start + width / scale) + 1 + 1/scale);
+  int endId = ds_->upper_bound(desiredEndTime) + 1;
+  if (startId < 0) startId = 0;
+  if (endId > ds_->size()) endId = ds_->size();
+
+  // Get the start & end time stamp according to start & end id
+  qint64 startTime = ds_->time(startId);
+  qint64 endTime = endId < ds_->size() ? ds_->time(endId) : ds_->max_time();
+  qreal startX = (startTime - start) * scale;
+  qreal endX = (endTime - start) * scale;
+
+  // Helper function to map points
+  CordMapper map(startX + left, top, endX - startX, height, startTime, endTime,
+                 ds_->min_sv(), ds_->max_sv(), yPercent);
+
+  // If endId <= startId, we do not draw anything
+  if (endTime <= startTime)
+    return;
+
+  // If scale >= 1.0, we can draw every related points
+  QPen spPen[4];
+  QPen missing_seg_pen(QBrush(QColor(173, 255, 47, 80)), 5);
+
+  // not in diff mode, normal 3 pens schema
+  if (scale >= spScale_ / ds_->min_time_span()) {
+    for (int i=0; i<2; ++i)
+    {
+      spPen[i] = pen_[i];
+      spPen[i].setWidthF(spRadius_);
+    }
+  }
+  painter->setPen(Qt::green);
+  if (/* scale >= 1.0 */ true) {
+    // draw the first point
+    painter->drawPoint(map(ds_->time(startId), ds_->sv(startId)));
+
+    for (int i=startId+1; i<endId; ++i) {
+      bool is_missing_segment = false;
+      if (ds_->time(i) - ds_->time(i - 1) > ds_->min_time_span())
+          is_missing_segment = true;
+      QPointF p1 = map(ds_->time(i-1), ds_->sv(i-1)),
+          p2 = map(ds_->time(i), ds_->sv(i));
+
+      painter->drawLine(p1, p2);
+      if (is_missing_segment)
+      {
+          painter->save();
+          painter->setPen(missing_seg_pen);
+          painter->drawLine(p1, p2);
+          painter->restore();
+      }
+    }
+
+    // draw single points
+    if (scale > spScale_ / ds_->min_time_span()) {
+      for (int i=startId; i<endId; ++i) {
+        if (!diff_mode_) {
+          // If we are not in diff mode.
+          painter->setPen(spPen[ds_->label(i)]);
+        } else {
+          // If we are in diff mode
+          painter->setPen(spPen[Label2Idx[ds_->label(i)][ds_->label2(i)]]);
+        }
+        painter->drawEllipse(map(ds_->time(i), ds_->sv(i)), spRadius_/2,
+                             spRadius_/2);
+      }
+    }
+  }
+}

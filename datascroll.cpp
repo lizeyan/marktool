@@ -118,6 +118,7 @@ void DataScroll::cachePic()
     dataPlot.initDiffMode(1.0);
   }
   dataPlot.render(&painter, pic_.rect(), ds_->min_time(), picScale_);
+  dataPlot.renderSupportLine(&painter, pic_.rect(), ds_->min_time(), picScale_);
 }
 
 void DataScroll::paintEvent(QPaintEvent *e)

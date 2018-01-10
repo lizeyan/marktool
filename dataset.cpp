@@ -67,6 +67,16 @@ void DataRecord::selectPV(int index)
   }
 }
 
+void DataRecord::selectSV(int index)
+{
+  if (index >= 0 && index < (int)values_.size()) {
+    bool ok = false;
+    sv_ = ToReal(values_.at(index), &ok);
+    if (!ok)
+      sv_ = 0.0;
+  }
+}
+
 DataSet::DataSet() :
   max_pv_(0),
   min_pv_(0xffffffff),
@@ -197,6 +207,22 @@ void DataSet::selectPV(int index)
 
   min_pv_ = minValue;
   max_pv_ = maxValue;
+}
+
+void DataSet::selectSV(int index)
+{
+  sv_index_ = index;
+  qreal minValue = 1e10, maxValue = -1e10;
+  if (index >= columns().size())
+      return;
+  for (std::vector<DataRecord>::iterator it = items_.begin();
+       it != items_.end(); ++it) {
+    it->selectSV(index);
+    minValue = std::min(it->sv(), minValue);
+    maxValue = std::max(it->sv(), maxValue);
+  }
+  min_sv_ = minValue;
+  max_sv_ = maxValue;
 }
 
 bool DataSet::save(const QString& path)

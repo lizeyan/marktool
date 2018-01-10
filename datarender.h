@@ -34,6 +34,8 @@ public:
   // Do the rendering (scale = picWidth / dataWidth)
   void render(QPainter *painter, QRect const& target, qreal start, qreal scale,
               qreal yPercent = 1.0);
+  void renderSupportLine(QPainter *painter, QRect const& target, qreal start, qreal scale,
+              qreal yPercent = 1.0);
 
   // Initialize the pens with default diff mode
   void initDiffMode(float width);

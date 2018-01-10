@@ -16,11 +16,13 @@ public:
 
   qint64 time() const { return time_; }
   qreal pv() const { return pv_; }
+  qreal sv() const {return sv_;}
   int label() const { return label_; }
   int label2() const { return label2_; }
 
   void setLabel(int label) { label_ = label; }
   void selectPV(int index);
+  void selectSV(int index);
 
   QDateTime toDateTime() const {
     return QDateTime::fromTime_t(time_);
@@ -42,7 +44,7 @@ public:
 
 private:
   qint64 time_;
-  qreal pv_;
+  qreal pv_, sv_;
   int label_, label2_;
 
   // The original values of this record are stored here, for later output
@@ -75,12 +77,15 @@ public:
 
   qreal max_pv() const { return max_pv_; }
   qreal min_pv() const { return min_pv_; }
+  qreal max_sv() const { return max_sv_; }
+  qreal min_sv() const { return min_sv_; }
   qint64 max_time() const { return max_time_; }
   qint64 min_time() const { return min_time_; }
   qint64 min_time_span() const { return min_time_span_; }
 
   // Fast access to item properties
   qreal pv(int idx) const { return items_.at(idx).pv(); }
+  qreal sv(int idx) const { return items_.at(idx).sv(); }
   qint64 time(int idx) const { return items_.at(idx).time(); }
   QDateTime dateTime(int idx) const { return items_.at(idx).toDateTime(); }
   int label(int idx) const { return items_.at(idx).label(); }
@@ -96,6 +101,9 @@ public:
 
   // Select the given column as main pv column
   void selectPV(int index);
+
+  void selectSV(int index);
+  bool legalSV() const {return sv_index_ < columns().size();}
 
   // Get the lower bound of the idx for given timestamp.
   // Return the smallest idx where time(idx) >= tm.
@@ -113,12 +121,15 @@ private:
 
   // Record the ever-seen max & min pv value.
   qreal max_pv_, min_pv_;
+  qreal max_sv_, min_sv_;
 
   // Record the ever-seen max & min time value.
   qint64 max_time_, min_time_;
 
   // Record the min span of timestamp.
   qint64 min_time_span_;
+
+  int sv_index_;
 };
 
 #endif // DATASET_H

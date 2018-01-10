@@ -102,7 +102,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Display Column</string>
+         <string>Display</string>
         </property>
         <property name="buddy">
          <cstring>selFeature</cstring>
@@ -111,6 +111,12 @@
       </item>
       <item>
        <widget class="QComboBox" name="selFeature">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="font">
          <font>
           <pointsize>14</pointsize>
@@ -127,7 +133,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>SupportColumn</string>
+         <string>Support</string>
         </property>
         <property name="buddy">
          <cstring>selSupportFeature</cstring>
@@ -135,7 +141,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="selSupportFeature"/>
+       <widget class="QComboBox" name="selSupportFeature">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QCheckBox" name="chkLabel2">
