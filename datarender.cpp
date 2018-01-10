@@ -94,6 +94,7 @@ void DataPlot::render(QPainter *painter, const QRect &target, qreal start,
 
   // If scale >= 1.0, we can draw every related points
   QPen pen[4], spPen[4];
+  QPen missing_seg_pen(QBrush(QColor(173,255,477, 80)), 5);
 
   if (!diff_mode_) {
     // not in diff mode, normal 3 pens schema
@@ -128,6 +129,9 @@ void DataPlot::render(QPainter *painter, const QRect &target, qreal start,
     painter->drawPoint(map(ds_->time(startId), ds_->pv(startId)));
 
     for (int i=startId+1; i<endId; ++i) {
+      bool is_missing_segment = false;
+      if (ds_->time(i) - ds_->time(i - 1) > ds_->min_time_span())
+          is_missing_segment = true;
       QPointF p1 = map(ds_->time(i-1), ds_->pv(i-1)),
           p2 = map(ds_->time(i), ds_->pv(i));
       QPointF pm = (p1 + p2) * 0.5;
@@ -144,6 +148,13 @@ void DataPlot::render(QPainter *painter, const QRect &target, qreal start,
           painter->drawLine(p1, pm);
           painter->setPen(pen[label2]);
           painter->drawLine(pm, p2);
+        }
+        if (is_missing_segment)
+        {
+            painter->save();
+            painter->setPen(missing_seg_pen);
+            painter->drawLine(p1, p2);
+            painter->restore();
         }
       } else {
         // If we are in diff mode
