@@ -41,6 +41,7 @@ protected slots:
   void myDataRangeChanged(qreal start, qreal size);
 
 protected:
+  friend class MainWindow; // forward event from MainWindow to DataEdit
   // Do the repaint
   void paintEvent(QPaintEvent *);
 

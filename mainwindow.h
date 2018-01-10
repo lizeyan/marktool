@@ -46,6 +46,8 @@ private:
 
   bool lockUpdateFeature_;
   void updateFeatureBox();
+
+  bool eventFilter(QObject *watched, QEvent *event);
 };
 
 #endif // MAINWINDOW_H

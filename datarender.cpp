@@ -94,7 +94,7 @@ void DataPlot::render(QPainter *painter, const QRect &target, qreal start,
 
   // If scale >= 1.0, we can draw every related points
   QPen pen[4], spPen[4];
-  QPen missing_seg_pen(QBrush(QColor(173,255,477, 80)), 5);
+  QPen missing_seg_pen(QBrush(QColor(173, 255, 47, 80)), 5);
 
   if (!diff_mode_) {
     // not in diff mode, normal 3 pens schema

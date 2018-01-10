@@ -35,6 +35,7 @@ public slots:
   void dataSetChanged();
 
 protected:
+  friend class MainWindow; // forward event from MainWindow to DataEdit
   // Do the repaint
   void paintEvent(QPaintEvent *);
 

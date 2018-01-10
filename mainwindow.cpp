@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QStringListModel>
+#include <QKeyEvent>
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -13,6 +14,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   ui->setupUi(this);
   ui->chkLabel2->setVisible(true);
+
+  ui->dataEdit->installEventFilter(this);
+  ui->dataScroll->installEventFilter(this);
 }
 
 MainWindow::~MainWindow()
@@ -136,4 +140,18 @@ void MainWindow::on_chkLabel2_clicked()
 {
   ui->dataEdit->set_diffMode(ui->chkLabel2->isChecked());
   ui->dataScroll->set_diffMode(ui->chkLabel2->isChecked());
+}
+
+bool MainWindow::eventFilter(QObject *watched, QEvent *event)
+{
+    qDebug() << event->type();
+    if (event->type() == QEvent::KeyPress)
+    {
+        // forward all keypress event to dataedit and datascroll
+        QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+        ui->dataEdit->keyPressEvent(keyEvent);
+        ui->dataScroll->keyPressEvent(keyEvent);
+        qDebug() << "filterd";
+    }
+    return QObject::eventFilter(watched, event);
 }
