@@ -243,12 +243,12 @@ void DataEdit::keyPressEvent(QKeyEvent *e) {
   const qreal sf = 0.1;
 
   // Strike "left", move the data towards left
-  if (e->key() == Qt::Key_Left) {
+  if (e->key() == Qt::Key_Left || e->key() == Qt::Key_A) {
     range_.shift(-sf);
   }
 
   // Srike "right", move the data towards right
-  else if (e->key() == Qt::Key_Right) {
+  else if (e->key() == Qt::Key_Right || e->key() == Qt::Key_D) {
     range_.shift(sf);
   }
 
