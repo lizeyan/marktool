@@ -80,6 +80,8 @@ void MainWindow::on_dataEdit_dataModified()
 {
   modified_ = true;
   setWindowTitle(QString("%1 [Modified]").arg(filePath_));
+  ui->dataScroll->invalidate_cache();
+  ui->dataScroll->update();
 }
 
 void MainWindow::on_btnSave_clicked()
@@ -119,7 +121,6 @@ void MainWindow::updateFeatureBox()
   ui->selSupportFeature->addItem("None");
   ui->selSupportFeature->setCurrentIndex(dataSet_.columns().size());
   ui->selSupportFeature->show();
-  qDebug() << ui->selSupportFeature->pos();
   lockUpdateFeature_ = false;
 
   // set the status of chkLabel2
@@ -142,7 +143,6 @@ void MainWindow::on_selSupportFeature_currentIndexChanged(int index)
 {
     if (!lockUpdateFeature_ && index >= 0) {
         dataSet_.selectSV(index);
-        qDebug() << dataSet_.legalSV();
         ui->dataEdit->update();
         ui->dataScroll->dataSetChanged();
     }

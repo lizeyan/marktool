@@ -33,6 +33,7 @@ signals:
 public slots:
   // Should be notified by someone else when dataset is updated
   void dataSetChanged();
+  void invalidate_cache() {pic_ = QPixmap();}
 
 protected:
   friend class MainWindow; // forward event from MainWindow to DataEdit

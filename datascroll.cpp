@@ -125,7 +125,6 @@ void DataScroll::paintEvent(QPaintEvent *e)
 {
   if (!ds_)
     return;
-
   // Try to build the picture cache
   cachePic();
   if (pic_.isNull())

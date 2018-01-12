@@ -103,7 +103,7 @@ public:
   void selectPV(int index);
 
   void selectSV(int index);
-  bool legalSV() const {return sv_index_ < columns().size();}
+  bool legalSV() const {return sv_index_ < int(columns().size());}
 
   // Get the lower bound of the idx for given timestamp.
   // Return the smallest idx where time(idx) >= tm.
