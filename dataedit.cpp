@@ -232,7 +232,29 @@ void DataEdit::paintEvent(QPaintEvent *e) {
 }
 
 // Listen to wheel event to change the size of selection range
-void DataEdit::wheelEvent(QWheelEvent *e) { QWidget::wheelEvent(e); }
+void DataEdit::wheelEvent(QWheelEvent *e)
+{
+    int delta = e->angleDelta().y();
+    constexpr int factor = 120;
+    constexpr qreal zf = 0.8;
+    if (delta > 0)
+    {
+        int times = delta / factor;
+        for (int i = 0; i < times; ++i)
+        {
+            range_.zoom(zf);
+        }
+    }
+    else if (delta < 0)
+    {
+        int times = -delta / factor;
+        for (int i = 0; i < times; ++i)
+        {
+            range_.zoom(1.0 / zf);
+        }
+    }
+    e->accept();
+}
 
 // React to keyboard actions
 void DataEdit::keyPressEvent(QKeyEvent *e) {
@@ -253,12 +275,12 @@ void DataEdit::keyPressEvent(QKeyEvent *e) {
   }
 
   // Strike "up", zoom in the data
-  else if (e->key() == Qt::Key_Up) {
+  else if (e->key() == Qt::Key_Up || e->key() == Qt::Key_W) {
     range_.zoom(zf);
   }
 
   // Strike "down", zoom out the data
-  else if (e->key() == Qt::Key_Down) {
+  else if (e->key() == Qt::Key_Down || e->key() == Qt::Key_S) {
     range_.zoom(1.0 / zf);
   }
 
