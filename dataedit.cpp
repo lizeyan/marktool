@@ -90,6 +90,14 @@ void DataEdit::set_diffMode(bool diffMode) {
   update();
 }
 
+void DataEdit::set_sameScale(bool sameScale)
+{
+    sameScale_ = sameScale;
+    refreshScales();
+    updateYticks();
+    update();
+}
+
 void DataEdit::paintEvent(QPaintEvent *e) {
   if (!ds_)
     return;
@@ -117,7 +125,7 @@ void DataEdit::paintEvent(QPaintEvent *e) {
   // Now draw the data points
   //-------------------------
 
-  DataPlot dataPlot;
+  DataPlot dataPlot(sameScale_);
   dataPlot.setDataSet(ds_);
 
   if (!diff_mode_) {

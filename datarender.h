@@ -9,7 +9,7 @@
 class DataPlot
 {
 public:
-  DataPlot();
+  DataPlot(bool useSameScale=true);
 
   // Get or set the data set
   void setDataSet(DataSet const* ds) { ds_ = ds; }
@@ -54,6 +54,8 @@ protected:
 
   // The width of single points
   qreal spRadius_;
+
+  bool useSameScale_;
 };
 
 #endif // DATARENDER_H

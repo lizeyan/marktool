@@ -39,8 +39,15 @@ void DataScroll::setDataSet(const DataSet *ds)
 void DataScroll::set_diffMode(bool diffMode)
 {
   diff_mode_ = diffMode;
-  pic_ = QPixmap();
+  invalidate_cache();
   update();
+}
+
+void DataScroll::set_sameScale(bool sameScale)
+{
+    sameScale_ = sameScale;
+    invalidate_cache();
+    update();
 }
 
 void DataScroll::setSelectRange(int selectStart, int selectSize)
@@ -109,7 +116,7 @@ void DataScroll::cachePic()
   }
 
   // Now plot the points on the picture
-  DataPlot dataPlot;
+  DataPlot dataPlot(sameScale_);
   dataPlot.setDataSet(ds_);
   if (!diff_mode_) {
     dataPlot.setPen(0, Qt::blue, 1.0);

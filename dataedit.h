@@ -29,6 +29,7 @@ public:
   // Get and set the diff mode
   bool diffMode() const { return diff_mode_; }
   void set_diffMode(bool diffMode);
+  void set_sameScale(bool sameScale);
 
 signals:
   void dataModified();
@@ -88,6 +89,8 @@ private:
 
   // Track the last "x" where we've draw the straight line cursor
   int lastLineCursor_;
+
+  bool sameScale_;
 
   // Cache the background of yticks
   QPixmap yticksCache_;

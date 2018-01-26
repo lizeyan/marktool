@@ -44,6 +44,7 @@ public:
     QComboBox *selFeature;
     QLabel *support_label;
     QComboBox *selSupportFeature;
+    QCheckBox *sameScaleChk;
     QCheckBox *chkLabel2;
     QPushButton *btnOpen;
     QPushButton *btnSave;
@@ -152,6 +153,11 @@ public:
 
         horizontalLayout_2->addWidget(selSupportFeature);
 
+        sameScaleChk = new QCheckBox(centralWidget);
+        sameScaleChk->setObjectName(QStringLiteral("sameScaleChk"));
+
+        horizontalLayout_2->addWidget(sameScaleChk);
+
         chkLabel2 = new QCheckBox(centralWidget);
         chkLabel2->setObjectName(QStringLiteral("chkLabel2"));
         chkLabel2->setEnabled(false);
@@ -201,6 +207,7 @@ public:
         lblMonth->setText(QApplication::translate("MainWindow", "Month", nullptr));
         label->setText(QApplication::translate("MainWindow", "Display", nullptr));
         support_label->setText(QApplication::translate("MainWindow", "Support", nullptr));
+        sameScaleChk->setText(QApplication::translate("MainWindow", "Same Scale", nullptr));
         chkLabel2->setText(QApplication::translate("MainWindow", "Diff Mode", nullptr));
         btnOpen->setText(QApplication::translate("MainWindow", "Open", nullptr));
         btnSave->setText(QApplication::translate("MainWindow", "Save", nullptr));

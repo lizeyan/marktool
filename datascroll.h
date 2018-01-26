@@ -25,6 +25,7 @@ public:
   // Get and set the diff mode
   bool diffMode() const { return diff_mode_; }
   void set_diffMode(bool diffMode);
+  void set_sameScale(bool sameScale);
 
 signals:
   void startIndexChanged();
@@ -58,6 +59,8 @@ private:
 
   // Whether we are in diff mode?
   bool diff_mode_;
+
+  bool sameScale_;
 
   // How many points of outline can the widget display at one time?
   qint64 outlineSize_;

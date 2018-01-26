@@ -14,11 +14,12 @@ static const int Label2Idx[2][2] = {
 
 } // namespace
 
-DataPlot::DataPlot() :
+DataPlot::DataPlot(bool useSameScale) :
   ds_(NULL),
   diff_mode_(false),
   spScale_(10.0),
-  spRadius_(5.0)
+  spRadius_(5.0),
+  useSameScale_(useSameScale)
 {
   pen_[0] = QPen(Qt::blue, 2.0);
   pen_[1] = QPen(Qt::red, 2.0);
@@ -211,9 +212,20 @@ void DataPlot::renderSupportLine(QPainter *painter, QRect const& target, qreal s
   qreal startX = (startTime - start) * scale;
   qreal endX = (endTime - start) * scale;
 
+  qreal vmin, vmax;
+  if (useSameScale_)
+  {
+      vmin = ds_->min_pv();
+      vmax = ds_->max_pv();
+  }
+  else
+  {
+      vmin = ds_->min_sv();
+      vmax = ds_->max_sv();
+  }
   // Helper function to map points
   CordMapper map(startX + left, top, endX - startX, height, startTime, endTime,
-                 ds_->min_sv(), ds_->max_sv(), yPercent);
+                 vmin, vmax, yPercent);
 
   // If endId <= startId, we do not draw anything
   if (endTime <= startTime)

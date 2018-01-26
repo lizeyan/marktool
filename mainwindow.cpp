@@ -159,6 +159,12 @@ void MainWindow::on_chkLabel2_clicked()
   ui->dataScroll->set_diffMode(ui->chkLabel2->isChecked());
 }
 
+void MainWindow::on_sameScaleChk_clicked()
+{
+    ui->dataEdit->set_sameScale(ui->sameScaleChk->isChecked());
+    ui->dataScroll->set_sameScale(ui->sameScaleChk->isChecked());
+}
+
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::KeyPress && (watched == ui->dataEdit || watched == ui->dataScroll))

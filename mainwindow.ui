@@ -151,6 +151,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QCheckBox" name="sameScaleChk">
+        <property name="text">
+         <string>Same Scale</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QCheckBox" name="chkLabel2">
         <property name="enabled">
          <bool>false</bool>
