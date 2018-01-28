@@ -5,6 +5,7 @@
 #include <string>
 #include <QDateTime>
 #include <QString>
+#include <iostream>
 
 struct DataRecord
 {
@@ -103,7 +104,7 @@ public:
   void selectPV(int index);
 
   void selectSV(int index);
-  bool legalSV() const {return sv_index_ < int(columns().size());}
+  bool legalSV() const {return sv_index_ < int(columns().size()) && sv_index_ >= 0;}
 
   // Get the lower bound of the idx for given timestamp.
   // Return the smallest idx where time(idx) >= tm.
@@ -129,7 +130,7 @@ private:
   // Record the min span of timestamp.
   qint64 min_time_span_;
 
-  int sv_index_;
+  int sv_index_ = -1;
 };
 
 #endif // DATASET_H

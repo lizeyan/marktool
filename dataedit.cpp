@@ -250,7 +250,7 @@ void DataEdit::wheelEvent(QWheelEvent *e)
         int times = delta / factor;
         for (int i = 0; i < times; ++i)
         {
-            range_.zoom(1.0 / zf);
+            range_.zoom(zf);
         }
     }
     else if (delta < 0)
@@ -258,7 +258,7 @@ void DataEdit::wheelEvent(QWheelEvent *e)
         int times = -delta / factor;
         for (int i = 0; i < times; ++i)
         {
-            range_.zoom(zf);
+            range_.zoom(1.0 / zf);
         }
     }
     e->accept();
