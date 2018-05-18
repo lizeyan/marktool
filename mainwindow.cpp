@@ -45,6 +45,7 @@ void MainWindow::on_dataScroll_selectionChanged()
 
 void MainWindow::on_btnOpen_clicked()
 {
+  static QString path = "*.*";
   if (modified_) {
     if (QMessageBox::question(this,
                               tr("Discard Changes?"),
@@ -55,7 +56,11 @@ void MainWindow::on_btnOpen_clicked()
 
   QString fileName = QFileDialog::getOpenFileName(this,
                                                   tr("Open File ..."),
-                                                  tr("*.*"));
+                                                  path);
+  if (!fileName.isNull())
+  {
+      path = QFileInfo(fileName).path();
+  }
   if (!fileName.isEmpty() && !fileName.isNull()) {
     if (!dataSet_.load(fileName)) {
       QMessageBox::critical(this,

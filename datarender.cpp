@@ -88,7 +88,7 @@ void DataPlot::render(QPainter *painter, const QRect &target, qreal start,
   // Helper function to map points
   CordMapper map(startX + left, top, endX - startX, height, startTime, endTime,
                  ds_->min_pv(), ds_->max_pv(), yPercent);
-
+  qDebug() << "min_pv:" << ds_->min_pv() << ", max_pv:" << ds_->max_pv();
   // If endId <= startId, we do not draw anything
   if (endTime <= startTime)
     return;
