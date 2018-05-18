@@ -71,6 +71,10 @@ void MainWindow::on_btnOpen_clicked()
     modified_ = false;
     filePath_ = fileName;
     setWindowTitle(filePath_);
+    if (dataSet_.min_time_span() == 0)
+    {
+        QMessageBox::warning(this, "Warning", "Repeated timestamp found", QMessageBox::Ok);
+    }
     ui->dataScroll->setDataSet(&dataSet_);
     ui->dataEdit->setDataSet(&dataSet_);
     ui->dataEdit->range()->setRange(dataSet_.min_time(), 24 * 60 * 60);
