@@ -221,8 +221,8 @@ void DataSet::selectPV(int index)
     maxValue = std::max(it->pv(), maxValue);
   }
 
-  min_pv_ = minValue;
-  max_pv_ = maxValue;
+  min_pv_ = minValue - 1;
+  max_pv_ = maxValue + 1;
 }
 
 void DataSet::selectSV(int index)
