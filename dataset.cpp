@@ -42,12 +42,20 @@ std::string Join(StrVector const& src, char delim)
 
 qint64 ToInt64(std::string const& s, bool *success=NULL)
 {
-  return QString::fromStdString(s).toLongLong(success);
+  if (s == "") {
+    return 0;
+  } else {
+    return QString::fromStdString(s).toLongLong(success);
+  }
 }
 
 int ToInt(std::string const& s, bool *success=NULL)
 {
-  return QString::fromStdString(s).toInt(success);
+  if (s == "") {
+    return 0;
+  } else {
+    return QString::fromStdString(s).toInt(success);
+  }
 }
 
 qreal ToReal(std::string const& s, bool *success=NULL)
@@ -122,18 +130,19 @@ bool DataSet::load(const QString& path)
 
   SplitInto(line.toStdString(), ',', &columns);
   for (StrVector::const_iterator it=columns.begin(); it!=columns.end(); ++it) {
-    if (*it == "timestamp")
+    QString colName = QString::fromStdString(*it).toLower().replace("\"", "").trimmed();
+    if (colName == "timestamp" || colName == "time")
       colTime = it - columns.begin();
-    else if (*it == "label")
+    else if (colName == "label")
       colLabel = it - columns.begin();
-    else if (*it == "label2")
+    else if (colName == "label2")
       colLabel2 = it - columns.begin();
-    else if (*it == "value")
+    else if (colName == "value")
       colValue = it - columns.begin();
   }
-  if (colTime == -1 || colLabel == -1)
+  if (colTime == -1)
     return false;
-  int maxRequired = std::max(colTime, colLabel);
+  int maxRequired = colTime;
 
   // Load each record into a temporary array
   std::vector<DataRecord> temp;
@@ -148,13 +157,20 @@ bool DataSet::load(const QString& path)
     if ((int)values.size() <= maxRequired)
       return false;
 
+    int label = 0;
     int label2 = 0;
-    bool ok1, ok2, ok3 = true;
+    bool ok1 = true, ok2 = true, ok3 = true;
+    if (colLabel != -1)
+      label = ToInt(values.at(colLabel), &ok2);
     if (colLabel2 != -1)
       label2 = ToInt(values.at(colLabel2), &ok3);
 
-    DataRecord dr(ToInt64(values.at(colTime), &ok1),
-                  ToInt(values.at(colLabel), &ok2),
+    qint64 timestamp = ToInt64(values.at(colTime), &ok1);
+    if (timestamp > 32474608725) {
+        timestamp = timestamp / 1000; // convert ms to s
+    }
+    DataRecord dr(timestamp,
+                  label,
                   label2);
     if (!ok1 || !ok2 || !ok3)
       return false;

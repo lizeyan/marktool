@@ -5,3 +5,4 @@ Makefile
 moc_*
 .qmake.stash
 *.app/
+.qtc_clangd/
