@@ -250,9 +250,13 @@ bool DataSet::save(const QString& path)
 
   QTextStream stream(&fout);
   stream.setCodec(QTextCodec::codecForName("utf-8"));
-  stream << QString::fromStdString(Join(columns_, ',')) << "\n";
 
   int colLabel = getColumnIndex("label");
+  if (colLabel != -1) {
+      stream << QString::fromStdString(Join(columns_, ',')) << "\n";
+  } else {
+      stream << QString::fromStdString(Join(columns_, ',')) << ",label\n";
+  }
   foreach (DataRecord const& dr, items_) {
     StrVector::const_iterator it = dr.values().begin();
     int cid = 1;
@@ -272,6 +276,10 @@ bool DataSet::save(const QString& path)
       else
         stream << QString::fromStdString(*it);
       ++cid; ++it;
+    }
+
+    if (colLabel == -1) {
+        stream << "," << dr.label();
     }
 
     stream << "\n";

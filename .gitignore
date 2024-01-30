@@ -6,3 +6,4 @@ moc_*
 .qmake.stash
 *.app/
 .qtc_clangd/
+*.dmg
