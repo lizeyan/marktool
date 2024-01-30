@@ -62,10 +62,13 @@ void MainWindow::on_btnOpen_clicked()
       path = QFileInfo(fileName).path();
   }
   if (!fileName.isEmpty() && !fileName.isNull()) {
-    if (!dataSet_.load(fileName)) {
+    QString errorMessage = "";
+      int colValue = -1;
+    if (!dataSet_.load(fileName, errorMessage, colValue)) {
       QMessageBox::critical(this,
                             tr("Cannot Load File"),
-                            tr("File cannot be loaded."));
+                            tr("File cannot be loaded.") + errorMessage
+                            );
       return;
     }
     modified_ = false;
@@ -81,7 +84,7 @@ void MainWindow::on_btnOpen_clicked()
     QDateTime dt;
     dt = dataSet_.at(0).toDateTime();
     ui->lblMonth->setText(tr("%1").arg(MonthNames[dt.date().month()]));
-    updateFeatureBox();
+    updateFeatureBox(colValue);
   }
 }
 
@@ -113,7 +116,7 @@ void MainWindow::on_dataEdit_dataRangeChanged(qreal start, qreal size)
   ui->dataScroll->setSelectRange(static_cast<int>(start), static_cast<int>(size));
 }
 
-void MainWindow::updateFeatureBox()
+void MainWindow::updateFeatureBox(int colValue)
 {
   lockUpdateFeature_ = true;
   QStringList featureArray;
@@ -123,7 +126,7 @@ void MainWindow::updateFeatureBox()
   }
   features_.setStringList(featureArray);
   ui->selFeature->setModel(&features_);
-  ui->selFeature->setCurrentIndex(dataSet_.getColumnIndex("value"));
+  ui->selFeature->setCurrentIndex(colValue);
 
   ui->selSupportFeature->clear();
   ui->selSupportFeature->addItems(featureArray);

@@ -58,7 +58,7 @@ public:
   DataSet();
   ~DataSet();
 
-  bool load(QString const& path);
+  bool load(QString const& path, QString& errorMessage, int& colValue);
   bool save(QString const& path);
 
   // Expose directly the items_ container

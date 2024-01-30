@@ -108,11 +108,13 @@ int DataSet::getColumnIndex(const std::string &name) const
   return -1;
 }
 
-bool DataSet::load(const QString& path)
+bool DataSet::load(const QString& path, QString& errorMessage, int& colValue)
 {
   QFile fin(path);
-  if (!fin.open(QIODevice::ReadOnly))
-    return false;
+    if (!fin.open(QIODevice::ReadOnly)) {
+        errorMessage = "Cannot open the given path" + path;
+        return false;
+    }
 
   QTextStream stream(&fin);
   stream.setCodec(QTextCodec::codecForName("utf-8"));
@@ -121,27 +123,36 @@ bool DataSet::load(const QString& path)
 
   // Check the column header
   if ((line = fin.readLine()).isNull()) {
-    return false;
+      errorMessage = "No headers found";
+      return false;
   }
   line = line.trimmed();
 
-  StrVector columns;
-  int colTime = -1, colLabel = -1, colLabel2 = -1, colValue = -1;
+  StrVector splitted_headers;
+  int colTime = -1, colLabel = -1, colLabel2 = -1;
 
-  SplitInto(line.toStdString(), ',', &columns);
-  for (StrVector::const_iterator it=columns.begin(); it!=columns.end(); ++it) {
-    QString colName = QString::fromStdString(*it).toLower().replace("\"", "").trimmed();
-    if (colName == "timestamp" || colName == "time")
-      colTime = it - columns.begin();
-    else if (colName == "label")
-      colLabel = it - columns.begin();
-    else if (colName == "label2")
-      colLabel2 = it - columns.begin();
-    else if (colName == "value")
-      colValue = it - columns.begin();
+  StrVector columns;
+  SplitInto(line.toStdString(), ',', &splitted_headers);
+  for (StrVector::const_iterator it=splitted_headers.begin(); it!=splitted_headers.end(); ++it) {
+      QString colName = QString::fromStdString(*it).trimmed();
+      columns.push_back(colName.toStdString());
+      QString compareColName = colName.toLower();
+      if (compareColName.startsWith("\"") && compareColName.endsWith("\"")) {
+          compareColName = compareColName.mid(1, compareColName.size() - 2);
+      }
+      if (compareColName == "timestamp" || compareColName == "time")
+          colTime = it - splitted_headers.begin();
+      else if (compareColName == "label")
+          colLabel = it - splitted_headers.begin();
+      else if (compareColName == "label2")
+          colLabel2 = it - splitted_headers.begin();
+      else if (compareColName == "value")
+          colValue = it - splitted_headers.begin();
   }
-  if (colTime == -1)
-    return false;
+  if (colTime == -1) {
+      errorMessage = "No time or timestamp column found: " + QString::fromStdString(Join(columns, ','));
+      return false;
+  }
   int maxRequired = colTime;
 
   // Load each record into a temporary array
@@ -154,8 +165,10 @@ bool DataSet::load(const QString& path)
     if ((line = line.trimmed()).isEmpty())
       break;
     SplitInto(line.toStdString(), ',', &values);
-    if ((int)values.size() <= maxRequired)
-      return false;
+    if ((int)values.size() <= maxRequired) {
+        errorMessage = "Parse line failed: " + line;
+        return false;
+    }
 
     int label = 0;
     int label2 = 0;
@@ -172,8 +185,10 @@ bool DataSet::load(const QString& path)
     DataRecord dr(timestamp,
                   label,
                   label2);
-    if (!ok1 || !ok2 || !ok3)
-      return false;
+    if (!ok1 || !ok2 || !ok3) {
+        errorMessage = "Parse line failed: " + line;
+        return false;
+    }
 
     dr.swapValues(values);
 
@@ -200,11 +215,20 @@ bool DataSet::load(const QString& path)
   columns_ = columns;
 
   // If "value" presents, select it as the main pv value
+  if (colValue < 0) {
+      // 尝试找到第一个不是时间戳也不是label的列作为value
+      for (int i = 0; i < int(columns.size()); ++i) {
+          if (colTime != i && colLabel != i && colLabel2 != i) {
+              colValue = i;
+              break;
+          }
+      }
+  }
   if (colValue) {
-    selectPV(colValue);
+      selectPV(colValue);
   } else {
-    min_pv_ = 0;
-    max_pv_ = 1;
+      min_pv_ = 0;
+      max_pv_ = 1;
   }
 
   return true;

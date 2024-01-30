@@ -49,7 +49,7 @@ private:
   QStringListModel features_;
 
   bool lockUpdateFeature_;
-  void updateFeatureBox();
+  void updateFeatureBox(int colValue);
 
   bool eventFilter(QObject *watched, QEvent *event);
 };
